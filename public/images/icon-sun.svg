@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-sun</title>
+    <description>Created with Sketch.</description>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Notes" sketch:type="MSArtboardGroup" transform="translate(-929.000000, -128.000000)">
+            <g id="icon-sun" sketch:type="MSLayerGroup" transform="translate(929.000000, 128.000000)">
+                <path d="M14,28 C21.7319865,28 28,21.7319865 28,14 C28,6.2680135 21.7319865,0 14,0 C6.2680135,0 0,6.2680135 0,14 C0,21.7319865 6.2680135,28 14,28 Z" id="bg" fill="#F5D318" sketch:type="MSShapeGroup"></path>
+                <circle id="sun-core" fill="#FFFFFF" sketch:type="MSShapeGroup" cx="14" cy="14" r="3"></circle>
+                <g id="sun-rays" transform="translate(7.000000, 7.000000)" stroke-linecap="round" stroke="#FFFFFF" sketch:type="MSShapeGroup">
+                    <g id="Line-+-Line-3" transform="translate(6.000000, 0.000000)">
+                        <path d="M1,0.5 L1,2.5" id="Line"></path>
+                        <path d="M1,11.5 L1,13.5" id="Line-3"></path>
+                    </g>
+                    <g id="Line-+-Line-6" transform="translate(7.000000, 7.000000) rotate(-315.000000) translate(-7.000000, -7.000000) translate(6.000000, 0.000000)">
+                        <path d="M1,0.5 L1,2.5" id="Line"></path>
+                        <path d="M1,11.5 L1,13.5" id="Line-3"></path>
+                    </g>
+                    <g id="Line-+-Line-4" transform="translate(7.000000, 7.000000) rotate(-270.000000) translate(-7.000000, -7.000000) translate(6.000000, 0.000000)">
+                        <path d="M1,0.5 L1,2.5" id="Line"></path>
+                        <path d="M1,11.5 L1,13.5" id="Line-3"></path>
+                    </g>
+                    <g id="Line-+-Line-5" transform="translate(7.000000, 7.000000) rotate(-225.000000) translate(-7.000000, -7.000000) translate(6.000000, 0.000000)">
+                        <path d="M1,0.5 L1,2.5" id="Line"></path>
+                        <path d="M1,11.5 L1,13.5" id="Line-3"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

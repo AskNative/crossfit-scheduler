@@ -1,0 +1,20 @@
+{{!-- Duration --}}
+<li>
+    <h4>
+        {{from}} — {{to}} {{type}}
+        <span class="text-warning">{{spotsLeft}}</span>
+    </h4>
+
+    <ul>
+        {{each people itemView="index/person"}}
+
+        {{#unless people.length}}
+            <li class="text-muted">No is here yet</li>
+        {{/unless}}
+    </ul>
+
+
+    <a class="Button Button--link"
+        href="#"
+        {{action "new" id date}}>Attend / Reserve / Book</a>
+</li>

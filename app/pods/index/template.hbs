@@ -1,0 +1,14 @@
+{{!-- Index --}}
+<header>
+    <h1>
+        {{title}}
+        <img src="/images/icon-moon.svg">
+        <img src="/images/icon-sun.svg">
+    </h1>
+
+    <hr>
+</header>
+
+<ul class="GridContainer">
+    {{each content itemView="index/day" itemController="index/day"}}
+</ul>
