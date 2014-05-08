@@ -1,5 +1,5 @@
 Router = Ember.Router.extend
-  location: 'auto'
+  location: ENV.locationType
 
 Router.map ->
   @route 'admin'

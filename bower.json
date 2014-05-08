@@ -2,7 +2,7 @@
   "name": "crossfit-scheduler",
   "dependencies": {
     "handlebars": "~1.3.0",
-    "jquery": "~1.11.1",
+    "jquery": "^1.11.1",
     "qunit": "~1.12.0",
     "ember-qunit": "~0.1.5",
     "ember": "1.5.1",
@@ -12,8 +12,8 @@
     "loader": "stefanpenner/loader.js#1.0.0",
     "ember-cli-shims": "stefanpenner/ember-cli-shims#0.0.1",
     "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.1",
-    "jeet.gs": "~5.1.3",
-    "emberfire": "~1.0.15",
-    "momentjs": "~2.6.0"
+    "emberfire": "~1.0.9",
+    "moment": "~2.6.0",
+    "jeet.gs": "~5.1.3"
   }
 }
