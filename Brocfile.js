@@ -14,6 +14,9 @@ app.import('vendor/firebase/firebase.js');
 app.import('vendor/emberfire/dist/emberfire.js');
 app.import('vendor/momentjs/moment.js');
 
+// CSS dependencies
+app.import('vendor/normalize-css/normalize.css');
+
 // If the library that you are including contains AMD or ES6 modules that
 // you would like to import into your application please specify an
 // object with the list of modules as keys along with the exports of each
