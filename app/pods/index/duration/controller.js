@@ -1,19 +1,55 @@
+/**
+ * IndexDuration Controller
+ *
+ * @type {ObjectController}
+ */
 var IndexDurationController = Ember.ObjectController.extend({
-  needs: ['index/day'],
-  // day: Ember.computed.alias('controller.index/day'),
-  // postsDetails: Ember.computed.alias('controllers.posts/details')
+  needs: ['index'],
 
-  dayBinding: 'parentController',
-  // @get 'parentController.showCitiesLink'
+  /**
+   * Binds parent model with parentController model
+   *
+   * @type {Model}
+   */
+  parentModelBinding: 'parentController.model.content',
+
+  /**
+   * Extracts time from current duration
+   *
+   * @return {String} Hour of the day as 7:00
+   */
+  from: (function() {
+    return moment(this.get('content')).format('hh:mm');
+  }).property('content'),
+
+  /**
+   * Extracts time from current duration and add +1 hour
+   *
+   * @return {String} Hour of the day as 7:00
+   */
+  to: (function() {
+    return moment(this.get('content')).add('h', 1).format('hh:mm');
+  }).property('content'),
+
+  /**
+   * Extracts time type as am/pm from current duration
+   *
+   * @return {String} Period of the day as am/pm
+   */
+  type: (function() {
+    return moment(this.get('content')).format('a');
+  }).property('content'),
 
   /**
    * Total number of spots to resurve
+   *
    * @type {Number}
    */
   maxSpots: 12,
 
   /**
    * Calculates spots left/avaiable to be resurved
+   *
    * @return {Number} Spots available to be resurved
    */
   spotsLeftCount: (function() {
@@ -25,6 +61,7 @@ var IndexDurationController = Ember.ObjectController.extend({
 
   /**
    * Shows spots left if spots left is low (ex: 3 seats left)
+   *
    * @return {String} Text indicating spots left
    */
   spotsLeft: (function() {
@@ -43,13 +80,46 @@ var IndexDurationController = Ember.ObjectController.extend({
     }
   }).property('spotsLeftCount'),
 
+  /**
+   * Seats
+   *
+   * @return {Array} Array of seats with people who reserved it
+   */
+  seats: (function() {
+    var seats       = this.get('parentModel');
+    var currentDay  = this.get('content');
+
+    return seats.filter(function(seat) {
+      var date = seat.get('date');
+
+      return  moment(date).isSame(currentDay, 'day') &&
+              moment(date).isSame(currentDay, 'time');
+    });
+  }).property('parentModel.@each.time'),
+
   actions: {
-    new: function(id, dayId) {
-      window.console.log(this.get('parentController.day'));
-      window.console.log(this.get('day'));
-      window.console.log('Insert item here', id, dayId);
+    /**
+     * Reserver the current user a spot in the selected schedule
+     *
+     * @param  {Object} duration
+     */
+    new: function(duration) {
+      var store = this.store;
+
+      store.find('person', '-JNJ4t6I95pc5nYnyqXx').then(function(me) {
+        var newSeat = store.createRecord('seat', {
+          date:   duration,
+          person: me
+        });
+
+        newSeat.save().then(function(data) {
+          console.log('success', data);
+        }, function(reason) {
+          console.log('failed', reason);
+        });
+      });
     }
-  }
+  },
 });
 
 export default IndexDurationController;

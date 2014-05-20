@@ -10,5 +10,36 @@
 </header>
 
 <ul class="GridContainer">
-    {{each content itemView="index/day" itemController="index/day"}}
+    {{#each days}}
+        <li class="GridCol">
+            <h2>{{date date}}</h2>
+            <ul>
+                {{#each duration in durations itemController="index/duration"}}
+                    <li>
+                        {{#with duration}}
+                            <h4>
+                                {{from}} — {{to}} {{type}}
+                                <span class="text-warning">{{spotsLeft}}</span>
+                            </h4>
+                        {{/with}}
+
+                        <ul>
+                            {{#each seats itemController="index/person"}}
+                                <li>{{person.name}}</li>
+                            {{/each}}
+
+                            {{#unless seats.length}}
+                                <li class="text-muted">No is here yet</li>
+                            {{/unless}}
+                        </ul>
+
+
+                        <a class="Button Button--link"
+                            href="#"
+                            {{action "new" duration}}>Attend / Reserve / Book</a>
+                    </li>
+                {{/each}}
+            </ul>
+        </li>
+    {{/each}}
 </ul>
