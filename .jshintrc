@@ -10,7 +10,10 @@
     "$": true,
     "ENV": true,
     "module": true,
-    "Firebase": true
+    "Firebase": true,
+    "FirebaseSimpleLogin": true,
+    "moment": true,
+    "console": true
   },
   "node" : false,
   "browser" : false,
