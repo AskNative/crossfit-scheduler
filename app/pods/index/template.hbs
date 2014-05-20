@@ -1,50 +1,65 @@
 {{!-- Index --}}
-<header>
-    <h1>
+<header class="Nav">
+    <h1 class="Nav-brand">
         {{title}}
-        <img src="/images/icon-moon.svg">
-        <img src="/images/icon-sun.svg">
     </h1>
 
-    {{#if currentUser}}
-        <img src="{{unbound currentUser.avatar}}">
-        {{currentUser.name}}
-    {{else}}
-        <button class="Button Button--primary" {{action "login"}}>
-            Login
-        </button>
-    {{/if}}
-
-    <hr>
+    <div class="Nav-action">
+        {{#if currentUser}}
+            <span class="align-right">
+                <img src="{{unbound currentUser.avatar}}" class="User-avatar">
+                {{!-- <span class="User-name">{{currentUser.name}}</span> --}}
+            </span>
+        {{else}}
+            <button
+                class="Button Button--primary Button--large align-right"
+                {{action "login"}}>
+                Login
+            </button>
+            {{!-- <li class="text-muted">You need to login first to be able to reserve your spot</li> --}}
+        {{/if}}
+    </div>
+    {{!-- <hr> --}}
 </header>
 
 <ul class="GridContainer">
     {{#each days}}
         <li class="GridCol">
             <h2>{{date date}}</h2>
-            <ul>
+            <ul class="Duration">
                 {{#each duration in durations itemController="index/duration"}}
-                    <li>
+                    <li class="Duration-item">
                         {{#with duration}}
                             <h4>
+                                {{#if duration.isMorning}}
+                                    <img src="/images/icon-sun.svg"
+                                    class="DurationItem-icon">
+                                {{else}}
+                                    <img src="/images/icon-moon.svg"
+                                    class="DurationItem-icon">
+                                {{/if}}
+
                                 {{from}} — {{to}} {{type}}
                                 <span class="text-warning">{{spotsLeft}}</span>
                             </h4>
                         {{/with}}
 
-                        <ul>
+                        <ul class="Users">
                             {{#each seats itemController="index/person"}}
-                                <li>{{person.name}}</li>
+                                <li>{{user.name}}</li>
                             {{/each}}
 
                             {{#unless seats.length}}
-                                <li class="text-muted">No is here yet</li>
+                                <li class="text-muted">No one is here yet</li>
                             {{/unless}}
                         </ul>
 
-                        <a class="Button Button--link"
-                            href="#"
-                            {{action "new" duration}}>Reserve</a>
+                        {{#if currentUser}}
+                            <a class="Button Button--link"
+                                href="#"
+                                style="padding-left: 32px"
+                                {{action "new" duration}}>Reserve</a>
+                        {{/if}}
                     </li>
                 {{/each}}
             </ul>

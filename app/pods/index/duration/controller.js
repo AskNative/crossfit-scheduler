@@ -12,6 +12,7 @@ var IndexDurationController = Ember.ObjectController.extend({
    */
   parentModelBinding: 'parentController.model.content',
 
+  currentUserBinding: 'parentController.currentUser',
   /**
    * @property {String} from Hour of the day as 7:00
    */
@@ -32,6 +33,11 @@ var IndexDurationController = Ember.ObjectController.extend({
   type: (function() {
     return moment(this.get('content')).format('a');
   }).property('content'),
+
+  /**
+   * @property {Boolean} isMorning Computed property that returns true if duration is am
+   */
+  isMorning: Ember.computed.equal('type', 'am'),
 
   /**
    * @property {Number} maxSpots Total number of spots to resurve
@@ -87,7 +93,7 @@ var IndexDurationController = Ember.ObjectController.extend({
    * Delete existing records on the same day
    *
    * @method deleteExistingRecords
-   * @param  {Person} me Model for the user to look for
+   * @param  {User} me Model for the user to look for
    */
   deleteExistingRecords: function(me) {
     var seats       = this.get('parentModel');
@@ -95,44 +101,36 @@ var IndexDurationController = Ember.ObjectController.extend({
 
     var seatsExisting = seats.filter(function(seat) {
       var date = seat.get('date');
-      var person = seat.get('person');
-
-      console.log(person.id, me.id);
+      var user = seat.get('user');
 
       return  moment(date).isSame(currentDay, 'day') &&
-              person.id === me.id;
+              user.id === me.id;
     });
 
     seatsExisting.invoke('deleteRecord');
     seatsExisting.invoke('save');
-    return;
   },
 
   actions: {
     /**
      * Reserver the current user a spot in the selected schedule
      *
+     * @method new
      * @param  {Object} duration
      */
     new: function(duration) {
-      var self  = this;
-      var store = this.store;
+      var self        = this;
+      var store       = this.store;
+      var currentUser = this.get('currentUser');
 
-      // Find person and create record after
-      store.find('person', '-JNJ4t6I95pc5nYnyqXx').then(function(me) {
+      // Find user and create record after
+      store.find('user', currentUser.id).then(function(me) {
         self.deleteExistingRecords(me);
 
-        // Create new seat
-        var newSeat = store.createRecord('seat', {
-          date:   duration,
-          person: me
-        });
-
-        newSeat.save().then(function(data) {
-          console.log('success', data);
-        }, function(reason) {
-          console.log('failed', reason);
-        });
+        store.createRecord('seat', {
+          date: duration,
+          user: me
+        }).save();
       });
     }
   },

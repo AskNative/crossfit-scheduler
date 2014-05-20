@@ -17,10 +17,21 @@ var IndexController = Ember.ArrayController.extend({
   title: 'Crossfit-Stars Box Schedule',
 
   /**
-   * @property {Person} currentUser Currently logged in user
+   * @property {User} currentUser Currently logged in user
    * @default null
    */
   currentUser: null,
+
+  isLoggedIn: (function() {
+    var self = this;
+    var userId = window.localStorage.getItem('user');
+
+    if (userId) {
+      this.store.find('user', userId).then(function(existingUser) {
+        self.set('currentUser', existingUser);
+      });
+    }
+  }).on('init'),
 
   /**
    * @property {Firebase} dbRef Firebase instance
@@ -97,10 +108,8 @@ var IndexController = Ember.ArrayController.extend({
     var promise = new Ember.RSVP.Promise(function(resolve, reject) {
       var auth = new FirebaseSimpleLogin(dbRef, function(error, user) {
         if (user) {
-          console.log('User is', user);
           resolve(user);
         } else if (error) {
-          console.log('Failed to login here', error);
           reject(error);
         }
       });
@@ -109,7 +118,6 @@ var IndexController = Ember.ArrayController.extend({
         rememberMe: true,
         scope: 'email'
       });
-
     });
 
     return promise;
@@ -128,9 +136,9 @@ var IndexController = Ember.ArrayController.extend({
       // Login with existing user or create new account
       this.authenticationWithFacebook().then(function(user) {
         var userAvatar = 'http://graph.facebook.com/' + user.id + '/picture?type=large';
+        window.localStorage.setItem('user', user.id);
 
         store.find('user', user.id).then(function(existingUser) {
-          console.log(existingUser);
           existingUser.setProperties({
             name:   user.displayName,
             email:  user.thirdPartyUserData.email,
