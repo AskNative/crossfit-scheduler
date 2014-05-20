@@ -1,6 +1,10 @@
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 
+import dateHelper from './helpers/date';
+
+Ember.Handlebars.registerBoundHelper('date', dateHelper);
+
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
 // Sepcifies app version number for Ember Debugger
