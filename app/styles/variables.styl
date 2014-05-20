@@ -1,0 +1,62 @@
+/**
+ * Jeet Syntax Quick Reference
+ * https://github.com/mojotech/jeet/tree/master/stylus
+ * ===================================================
+ *
+ * column(ratios = 1, offset = 0, cycle = 0, uncycle = 0)
+ * span(ratio = 1, offset = 0)
+ * shift(ratios = 0, col_or_span = column)
+ * unshift()
+ * edit()
+ * center(max_width = 1410px, pad = 0)
+ * stack(pad = 0, align = false)
+ * unstack()
+ * align(direction = both)
+ * cf()
+*/
+
+/**
+ * Rupture Syntax Quick Reference
+ * https://github.com/jenius/rupture
+ * ==================================
+ *
+ * Variables
+ * ---------
+ * mobile-cutoff
+ * desktop-cutoff
+ * scale — ex: `scale = 0 400px 600px 800px 1050px`
+ *
+ * Mixins
+ * ------
+ * +above(measure)
+ * +from(measure)
+ * +below(measure)
+ * +to(measure)
+ * +between(measure, measure)
+ * +at(measure)
+ * +mobile()
+ * +tablet()
+ * +desktop()
+ * +retina()
+ */
+
+// Breakpoint:   0                 400px     600px     800px       1050px
+//               ├───────────────────┼─────────┼─────────┼───────────┼─────────>
+// Slice #:                1         ·    2         3          4     ·    5
+
+/**
+ * Variables
+ */
+
+/* Colors */
+text-color = #4A4A4A
+brand-color = #56B955
+warning-color = #D0021B
+muted-color = #D8D8D8
+background-color = white
+
+/* Fonts */
+font-family-sans = HelveticaNeue-light, Helvetica, Arial, sans-serif
+
+/* Responsive */
+// scale = 0 768px 992px 1200px
