@@ -3,7 +3,6 @@ Router = Ember.Router.extend
 
 Router.map ->
   @route 'admin'
-  @route 'auth'
 
   @route 'not-found', path: '/*path'
 
