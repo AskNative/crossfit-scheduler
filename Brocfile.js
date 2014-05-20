@@ -12,6 +12,7 @@ var app = new EmberApp({
 app.import('vendor/ember-data/ember-data.js');
 app.import('vendor/firebase/firebase.js');
 app.import('vendor/emberfire/dist/emberfire.js');
+app.import('vendor/firebase-simple-login/firebase-simple-login.js');
 app.import('vendor/momentjs/moment.js');
 
 // CSS dependencies
