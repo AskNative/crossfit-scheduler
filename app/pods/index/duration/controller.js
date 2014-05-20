@@ -104,9 +104,28 @@ var IndexDurationController = Ember.ObjectController.extend({
      * @param  {Object} duration
      */
     new: function(duration) {
-      var store = this.store;
+      var store       = this.store;
+      var seats       = this.get('parentModel');
+      var currentDay  = this.get('content');
 
+      // Find person and create record after
       store.find('person', '-JNJ4t6I95pc5nYnyqXx').then(function(me) {
+
+        // Delete existing records on the same day
+        var seatsExisting = seats.filter(function(seat) {
+          var date = seat.get('date');
+          var person = seat.get('person');
+
+          console.log(person.id, me.id);
+
+          return  moment(date).isSame(currentDay, 'day') &&
+                  person.id === me.id;
+        });
+
+        seatsExisting.invoke('deleteRecord');
+        seatsExisting.invoke('save');
+
+        // Create new seat
         var newSeat = store.createRecord('seat', {
           date:   duration,
           person: me
