@@ -7,50 +7,39 @@ var IndexDurationController = Ember.ObjectController.extend({
   needs: ['index'],
 
   /**
-   * Binds parent model with parentController model
-   *
+   * @property parentModel
    * @type {Model}
    */
   parentModelBinding: 'parentController.model.content',
 
   /**
-   * Extracts time from current duration
-   *
-   * @return {String} Hour of the day as 7:00
+   * @property {String} from Hour of the day as 7:00
    */
   from: (function() {
     return moment(this.get('content')).format('hh:mm');
   }).property('content'),
 
   /**
-   * Extracts time from current duration and add +1 hour
-   *
-   * @return {String} Hour of the day as 7:00
+   * @property {String} to Hour of the day as 7:00
    */
   to: (function() {
     return moment(this.get('content')).add('h', 1).format('hh:mm');
   }).property('content'),
 
   /**
-   * Extracts time type as am/pm from current duration
-   *
-   * @return {String} Period of the day as am/pm
+   * @property {String} type Period of the day as am/pm
    */
   type: (function() {
     return moment(this.get('content')).format('a');
   }).property('content'),
 
   /**
-   * Total number of spots to resurve
-   *
-   * @type {Number}
+   * @property {Number} maxSpots Total number of spots to resurve
    */
   maxSpots: 12,
 
   /**
-   * Calculates spots left/avaiable to be resurved
-   *
-   * @return {Number} Spots available to be resurved
+   * @property {Number} spotsLeftCount Spots available to be resurved
    */
   spotsLeftCount: (function() {
     var peopleCount = this.get('people.length') || 0;
@@ -60,9 +49,8 @@ var IndexDurationController = Ember.ObjectController.extend({
   }).property('people', 'people.length'),
 
   /**
-   * Shows spots left if spots left is low (ex: 3 seats left)
-   *
-   * @return {String} Text indicating spots left
+   * @property {String} spotsLeft Text indicating spots left if running out
+   *                              (ex: 3 seats left)
    */
   spotsLeft: (function() {
     var spotsLeft = this.get('spotsLeftCount');
@@ -81,9 +69,7 @@ var IndexDurationController = Ember.ObjectController.extend({
   }).property('spotsLeftCount'),
 
   /**
-   * Seats
-   *
-   * @return {Array} Array of seats with people who reserved it
+   * @property {Array} seats Array of seats with people who reserved it
    */
   seats: (function() {
     var seats       = this.get('parentModel');
@@ -97,6 +83,31 @@ var IndexDurationController = Ember.ObjectController.extend({
     });
   }).property('parentModel.@each.time'),
 
+  /**
+   * Delete existing records on the same day
+   *
+   * @method deleteExistingRecords
+   * @param  {Person} me Model for the user to look for
+   */
+  deleteExistingRecords: function(me) {
+    var seats       = this.get('parentModel');
+    var currentDay  = this.get('content');
+
+    var seatsExisting = seats.filter(function(seat) {
+      var date = seat.get('date');
+      var person = seat.get('person');
+
+      console.log(person.id, me.id);
+
+      return  moment(date).isSame(currentDay, 'day') &&
+              person.id === me.id;
+    });
+
+    seatsExisting.invoke('deleteRecord');
+    seatsExisting.invoke('save');
+    return;
+  },
+
   actions: {
     /**
      * Reserver the current user a spot in the selected schedule
@@ -104,26 +115,12 @@ var IndexDurationController = Ember.ObjectController.extend({
      * @param  {Object} duration
      */
     new: function(duration) {
-      var store       = this.store;
-      var seats       = this.get('parentModel');
-      var currentDay  = this.get('content');
+      var self  = this;
+      var store = this.store;
 
       // Find person and create record after
       store.find('person', '-JNJ4t6I95pc5nYnyqXx').then(function(me) {
-
-        // Delete existing records on the same day
-        var seatsExisting = seats.filter(function(seat) {
-          var date = seat.get('date');
-          var person = seat.get('person');
-
-          console.log(person.id, me.id);
-
-          return  moment(date).isSame(currentDay, 'day') &&
-                  person.id === me.id;
-        });
-
-        seatsExisting.invoke('deleteRecord');
-        seatsExisting.invoke('save');
+        self.deleteExistingRecords(me);
 
         // Create new seat
         var newSeat = store.createRecord('seat', {

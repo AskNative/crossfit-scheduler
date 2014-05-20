@@ -1,12 +1,15 @@
-var dbRef = new Firebase(ENV.APP.FIREBASE_URL);
-
+/**
+ * Auth Controller
+ *
+ * @type {Controller}
+ */
 export default Ember.Controller.extend({
 
-  // firebaseClient: new Firebase(ENV.APP.FIREBASE_URL)
+  dbRef: new Firebase(ENV.APP.FIREBASE_URL),
 
   actions: {
     login: function() {
-      var auth = new FirebaseSimpleLogin(dbRef, function(error, user) {
+      var auth = new FirebaseSimpleLogin(this.get('dbRef'), function(error, user) {
         if (user) {
           console.log('User is', user);
 

@@ -17,6 +17,17 @@ var IndexController = Ember.ArrayController.extend({
   title: 'Crossfit-Stars Box Schedule',
 
   /**
+   * @property {Person} currentUser Currently logged in user
+   * @default null
+   */
+  currentUser: null,
+
+  /**
+   * @property {Firebase} dbRef Firebase instance
+   */
+  dbRef: new Firebase(ENV.APP.FIREBASE_URL),
+
+  /**
    * Creates an array of days with durations for each day
    *
    * @return {Array[Object]} Array of day object with duration in each day
@@ -75,6 +86,77 @@ var IndexController = Ember.ArrayController.extend({
       return spotsLeft + ' ' + append;
     }
   }).property('spotsLeftCount'),
+
+  /**
+   * @method authenticationWithFacebook
+   * @return {Promise} Returns a promsie that resolves with newly created user
+   */
+  authenticationWithFacebook: function() {
+    var dbRef = this.get('dbRef');
+
+    var promise = new Ember.RSVP.Promise(function(resolve, reject) {
+      var auth = new FirebaseSimpleLogin(dbRef, function(error, user) {
+        if (user) {
+          console.log('User is', user);
+          resolve(user);
+        } else if (error) {
+          console.log('Failed to login here', error);
+          reject(error);
+        }
+      });
+
+      auth.login('facebook', {
+        rememberMe: true,
+        scope: 'email'
+      });
+
+    });
+
+    return promise;
+  },
+
+  actions: {
+    /**
+     * Login using facebook
+     *
+     * @method login
+     */
+    login: function() {
+      var self  = this;
+      var store = this.store;
+
+      // Login with existing user or create new account
+      this.authenticationWithFacebook().then(function(user) {
+        var userAvatar = 'http://graph.facebook.com/' + user.id + '/picture?type=large';
+
+        store.find('user', user.id).then(function(existingUser) {
+          console.log(existingUser);
+          existingUser.setProperties({
+            name:   user.displayName,
+            email:  user.thirdPartyUserData.email,
+            avatar: userAvatar,
+          });
+
+          existingUser.save().then(function(value) {
+            self.set('currentUser', value);
+          });
+
+        }, function() {
+
+          var newUser= store.createRecord('user', {
+            id:      user.id,
+            name:    user.displayName,
+            email:   user.thirdPartyUserData.email,
+            avatar:  userAvatar,
+          });
+
+          newUser.save().then(function(value) {
+            self.set('currentUser', value);
+          });
+        });
+      });
+    }
+  }
 });
 
 export default IndexController;

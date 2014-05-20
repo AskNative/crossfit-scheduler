@@ -6,6 +6,15 @@
         <img src="/images/icon-sun.svg">
     </h1>
 
+    {{#if currentUser}}
+        <img src="{{unbound currentUser.avatar}}">
+        {{currentUser.name}}
+    {{else}}
+        <button class="Button Button--primary" {{action "login"}}>
+            Login
+        </button>
+    {{/if}}
+
     <hr>
 </header>
 
@@ -33,10 +42,9 @@
                             {{/unless}}
                         </ul>
 
-
                         <a class="Button Button--link"
                             href="#"
-                            {{action "new" duration}}>Attend / Reserve / Book</a>
+                            {{action "new" duration}}>Reserve</a>
                     </li>
                 {{/each}}
             </ul>

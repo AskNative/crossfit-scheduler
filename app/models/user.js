@@ -1,11 +1,12 @@
 var attr = DS.attr;
 
 /**
- * Person model
+ * User model
  *
  * @type {DS.Model}
  */
 export default DS.Model.extend({
-  name:   attr(),
-  avatar: attr()
+  name:    attr(),
+  email:   attr(),
+  avatar:  attr(),
 });
